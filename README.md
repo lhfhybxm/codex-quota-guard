@@ -106,6 +106,12 @@ flowchart LR
 - Failures use bounded exponential backoff with jitter and keep stale/unavailable states explicit.
 - A new epoch starts when reset time, limit identity, or a high-to-near-zero percentage transition indicates a reset.
 
+### Tray display
+
+The tray icon shows the rounded **weekly remaining percentage** as digits without a percent sign. Values below 10 are zero-padded (`04`); an untouched window is shown honestly as `100`. If the weekly window is not returned, the icon falls back to the 5-hour window. When neither official window is available, it shows `--`.
+
+Hovering the icon shows both windows' remaining and used percentages, reset times, and the last successful update. Opening the tray menu adds the absolute weekly estimate, confidence, source, and freshness state.
+
 ## Estimation and confidence
 
 Confidence is a 0–100 score based on sample count, observed percentage span, residuals, local-slope agreement, completeness, freshness, delay, source continuity, and model consistency. Likely ranges use robust slope quantiles plus residual and percentage-rounding allowance. Historical completed cycles form a median/MAD baseline; a high-confidence deviation can raise a quota-change warning.
@@ -127,6 +133,8 @@ If the dashboard reports unavailable:
 2. Confirm Codex is signed in.
 3. Run the `--once` command above.
 4. Review the redacted `app.log`.
+
+If you see the literal legacy status line `UNAVAILABLE · Source: Codex App Server · Last updated: never`, you are running an unpublished pre-Qt test build. Exit that old tray process, extract the latest Release into a new folder, and run its EXE without mixing files from older `publish\...` directories.
 
 The latest local verification evidence is summarized in [docs/real-read-2026-08-20.md](docs/real-read-2026-08-20.md).
 

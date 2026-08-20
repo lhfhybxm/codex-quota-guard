@@ -14,6 +14,8 @@ Codex Quota Guard 是一个 Windows 本地系统托盘工具。它把 Codex 官�
 
 - Qt 6/QML 深色桌面界面，支持普通窗口、最大化和窄窗口自适应。
 - Windows 原生托盘：关闭窗口后继续监测，可从托盘打开、刷新或退出。
+- 托盘图标优先显示 Weekly 剩余百分比的整数，不带 `%`；低于 10 时补零，Weekly 缺失时回退到 5 小时窗口。
+- 鼠标悬停托盘图标可查看 5h/Weekly 的剩余、已用、重置时间和最后更新时间；托盘菜单还会显示绝对估算、置信度与数据源状态。
 - 分别维护 5 小时与 Weekly calibration epoch，绝不混合拟合。
 - 使用 Theil–Sen 鲁棒斜率估计 `Q = 100b`，支持周期中途安装。
 - 有效使用跨度不足约 5 个百分点时只显示“正在校准”。
@@ -78,6 +80,18 @@ cd codex-quota-guard
 
 每次构建都会创建新的 `publish\时间戳\` 目录，不覆盖旧版本。
 
+## 托盘数字含义
+
+托盘图标中的数字表示**官方窗口的剩余百分比**，不是已用百分比，也不是估算 credits：
+
+- 默认显示 Weekly 剩余百分比并四舍五入为整数，例如 `75`；
+- 低于 10 时显示为两位，例如 `04`；
+- 完全未使用时为避免误导，诚实显示 `100`；
+- Weekly 未返回时自动显示 5 小时窗口；
+- 两个窗口都不可用时显示 `--`，不会制造一个假数字。
+
+悬停信息保留一位小数，并同时显示已用比例、重置时间与最近成功更新时间。
+
 ## 当前数据含义
 
 当前 Codex App Server 可以返回官方百分比、重置时间、窗口时长和 lifetime token/daily token buckets，但没有返回可用于精确换算的模型拆分、input/cached/output token、estimated credits 或美元 cost。因此：
@@ -96,6 +110,8 @@ cd codex-quota-guard
 ```
 
 程序不会把本地额度历史上传到云端。真实只读验证的脱敏摘要见 [real-read-2026-08-20.md](real-read-2026-08-20.md)。
+
+如果界面出现完整旧文案 `UNAVAILABLE · Source: Codex App Server · Last updated: never`，说明运行的是未发布的 Qt 迁移前测试包。请先从托盘退出旧进程，把最新 Release 解压到一个全新目录，再运行其中的 EXE；不要把新旧 `publish\...` 目录混合覆盖。
 
 ## 开源说明
 
