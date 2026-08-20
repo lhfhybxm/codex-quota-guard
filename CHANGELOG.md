@@ -4,6 +4,17 @@ All notable changes will be documented here. The format follows Keep a Changelog
 
 ## [Unreleased]
 
+## [0.1.2] - 2026-08-20
+
+### Added
+
+- Display the weekly remaining percentage as a high-contrast integer inside the tray icon, falling back to the 5-hour window when weekly data is unavailable.
+- Show official remaining, used, reset, estimate, source, freshness, and update details in the tray tooltip and menu.
+
+### Changed
+
+- Use `--` instead of inventing a percentage when no official window is available.
+
 ## [0.1.1] - 2026-08-20
 
 ### Fixed
