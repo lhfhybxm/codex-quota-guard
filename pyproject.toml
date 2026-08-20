@@ -1,0 +1,48 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "codex-quota-guard"
+version = "0.1.0"
+description = "A zero-inference Windows tray monitor for Codex rate-limit calibration"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "Codex Quota Guard contributors" }]
+keywords = ["codex", "quota", "windows", "tray", "monitoring"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Environment :: Win32 (MS Windows)",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+]
+dependencies = [
+  "PySide6>=6.8,<7",
+]
+
+[project.optional-dependencies]
+dev = [
+  "Pillow>=10.0,<13",
+  "pytest>=8,<10",
+  "pyinstaller>=6,<7",
+]
+
+[project.scripts]
+codex-quota-guard = "codex_quota_guard.__main__:main"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+codex_quota_guard = ["storage/schema.sql", "ui/qml/*.qml"]
+
+[tool.pytest.ini_options]
+addopts = "-q"
+testpaths = ["tests"]
+pythonpath = ["src"]

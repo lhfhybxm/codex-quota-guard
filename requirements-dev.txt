@@ -1,0 +1,4 @@
+-r requirements.txt
+Pillow>=10.0,<13
+pytest>=8,<10
+pyinstaller>=6,<7

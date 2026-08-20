@@ -1,0 +1,25 @@
+name: Feature request
+description: Suggest a read-only improvement
+title: "[Feature]: "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What user workflow needs improvement?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+    validations:
+      required: true
+  - type: checkboxes
+    id: boundary
+    attributes:
+      label: Safety boundary
+      options:
+        - label: The proposal does not require prompts, turns, model responses, reset-credit consumption, account writes, or credential uploads.
+          required: true

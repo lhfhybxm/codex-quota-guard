@@ -1,0 +1,43 @@
+name: Release Windows package
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Create build environment
+        shell: pwsh
+        run: |
+          python -m venv .venv-win
+          .\.venv-win\Scripts\python.exe -m pip install -e ".[dev]"
+      - name: Test and build
+        shell: pwsh
+        run: .\scripts\Build.ps1
+      - name: Archive folder distribution
+        id: archive
+        shell: pwsh
+        run: |
+          $package = Get-ChildItem -LiteralPath publish -Directory |
+            Sort-Object Name -Descending |
+            Select-Object -First 1
+          if ($null -eq $package) { throw 'Build package was not created.' }
+          $archive = "CodexQuotaGuard-$env:GITHUB_REF_NAME-win-x64.zip"
+          Compress-Archive -Path (Join-Path $package.FullName 'CodexQuotaGuard\*') -DestinationPath $archive
+          "archive=$archive" >> $env:GITHUB_OUTPUT
+      - name: Publish GitHub release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$env:GITHUB_REF_NAME" "${{ steps.archive.outputs.archive }}" --verify-tag --generate-notes --title "$env:GITHUB_REF_NAME"
