@@ -12,7 +12,11 @@ if (-not (Test-Path -LiteralPath $venvPython -PathType Leaf)) {
 Push-Location $projectRoot
 try {
     $buildTag = Get-Date -Format 'yyyyMMdd-HHmmss'
-    $pytestTemp = Join-Path $projectRoot "artifacts\pytest-$buildTag"
+    $artifactRoot = Join-Path $projectRoot 'artifacts'
+    if (-not (Test-Path -LiteralPath $artifactRoot -PathType Container)) {
+        New-Item -ItemType Directory -Path $artifactRoot -ErrorAction Stop | Out-Null
+    }
+    $pytestTemp = Join-Path $artifactRoot "pytest-$buildTag"
     & $venvPython -m pytest --basetemp $pytestTemp
     if ($LASTEXITCODE -ne 0) { throw "Tests failed with exit code $LASTEXITCODE" }
     $distPath = Join-Path $projectRoot "publish\$buildTag"
@@ -23,7 +27,7 @@ try {
     $qmlPath = Join-Path $projectRoot 'src\codex_quota_guard\ui\qml'
     $hookPath = Join-Path $projectRoot 'packaging\hooks'
     $launcherPath = Join-Path $projectRoot 'packaging\launcher.py'
-    $iconPath = Join-Path $projectRoot "artifacts\icon-$buildTag\CodexQuotaGuard.ico"
+    $iconPath = Join-Path $artifactRoot "icon-$buildTag\CodexQuotaGuard.ico"
     & $venvPython (Join-Path $projectRoot 'scripts\generate_icon.py') $iconPath
     if ($LASTEXITCODE -ne 0) { throw "Icon generation failed with exit code $LASTEXITCODE" }
     $pyInstallerArguments = @(

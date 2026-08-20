@@ -4,6 +4,13 @@ All notable changes will be documented here. The format follows Keep a Changelog
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-08-20
+
+### Fixed
+
+- Create the ignored `artifacts` parent directory before pytest uses its timestamped temporary path in a clean checkout.
+- Report the package version dynamically in the App Server initialization payload.
+
 ## [0.1.0] - 2026-08-20
 
 ### Added

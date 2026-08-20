@@ -10,6 +10,7 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Any
 
+from . import __version__
 from .redaction import redact
 from .security import (
     is_allowed_incoming_notification,
@@ -92,7 +93,7 @@ class AppServerTransport:
         self.request(
             "initialize",
             {
-                "clientInfo": {"name": "codex-quota-guard", "version": "0.1.0"},
+                "clientInfo": {"name": "codex-quota-guard", "version": __version__},
                 "capabilities": {"experimentalApi": True},
             },
         )
